@@ -38,21 +38,29 @@
         .text {
             font-size: 18px;
             color: #444;
-            min-height: 100px;
+            min-height: 80px;
             margin-bottom: 20px;
             line-height: 1.6;
-            transition: opacity 0.5s ease-in-out;
         }
 
         .fade-in {
             animation: fadeIn 0.8s ease-in forwards;
         }
 
-        img {
-            width: 100%;
+        /* Updated Image Container per your request */
+        #image {
+            max-height: 60vh; /* Kept slightly lower than 90vh to fit the card text/button comfortably */
+            overflow-y: auto;
             border-radius: 15px;
             margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            scrollbar-width: thin;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 10px;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             animation: fadeIn 1s ease-in forwards;
         }
 
@@ -66,17 +74,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             outline: none;
+            margin-top: 15px;
         }
 
         button:hover {
             background: #ff3357;
             transform: scale(1.05);
-        }
-
-        button:disabled {
-            background: #ffb3c1;
-            cursor: not-allowed;
-            transform: scale(1);
         }
 
         @keyframes pulse {
@@ -104,17 +107,18 @@
             50% { transform: translateY(-20px) scale(1.1); opacity: 0.8; }
         }
 
-        .heart-shower {
+        /* Shower Effect Styles */
+        .shower-item {
             position: fixed;
             font-size: 40px;
             animation: fall 3s linear forwards;
             pointer-events: none;
-            z-index: 15;
+            z-index: 100;
         }
 
         @keyframes fall {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
@@ -181,6 +185,7 @@ let index = 0;
 const textElement = document.getElementById("text");
 const imgDiv = document.getElementById("image");
 const music = document.getElementById("bgMusic");
+const btn = document.getElementById("btn");
 
 function createPulsatingHearts() {
     const positions = [
@@ -200,16 +205,17 @@ function createPulsatingHearts() {
     });
 }
 
-function triggerHeartShower() {
-    for (let i = 0; i < 35; i++) {
+function triggerShower() {
+    const items = ['❤️', '🌸', '🪷', '💗', '💖'];
+    for (let i = 0; i < 60; i++) {
         setTimeout(() => {
-            const heart = document.createElement('div');
-            heart.className = 'heart-shower';
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + '%';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 3000);
-        }, i * 150);
+            const item = document.createElement('div');
+            item.className = 'shower-item';
+            item.innerHTML = items[Math.floor(Math.random() * items.length)];
+            item.style.left = Math.random() * 100 + '%';
+            document.body.appendChild(item);
+            setTimeout(() => item.remove(), 3000);
+        }, i * 100);
     }
 }
 
@@ -232,13 +238,19 @@ function next() {
 
         index++;
 
-        if (index >= messages.length) {
-            const button = document.getElementById("btn");
-            button.innerText = "💕 Always & Forever 💕";
-            button.disabled = true;
-            triggerHeartShower();
+        // When we reach the end of the message array
+        if (index === messages.length) {
+            btn.innerText = "💕 Always & Forever 💕";
+            btn.onclick = finalAction; // Change button function
         }
     }
+}
+
+function finalAction() {
+    triggerShower();
+    setTimeout(() => {
+        alert("Love you more than anything! ❤️");
+    }, 500);
 }
 
 window.addEventListener('load', createPulsatingHearts);
