@@ -18,6 +18,8 @@
         }
 
         .card {
+            max-height: 90vh;
+            overflow-y: auto;
             background: white;
             padding: 30px;
             width: 90%;
@@ -47,9 +49,8 @@
             animation: fadeIn 0.8s ease-in forwards;
         }
 
-        /* Updated Image Container per your request */
         #image {
-            max-height: 60vh; /* Kept slightly lower than 90vh to fit the card text/button comfortably */
+            max-height: 40vh; /* Adjusted to ensure button stays visible on mobile */
             overflow-y: auto;
             border-radius: 15px;
             margin-top: 15px;
@@ -107,7 +108,6 @@
             50% { transform: translateY(-20px) scale(1.1); opacity: 0.8; }
         }
 
-        /* Shower Effect Styles */
         .shower-item {
             position: fixed;
             font-size: 40px;
@@ -190,8 +190,7 @@ const btn = document.getElementById("btn");
 function createPulsatingHearts() {
     const positions = [
         { top: '10%', left: '5%' }, { top: '15%', right: '8%' },
-        { top: '70%', left: '10%' }, { top: '75%', right: '5%' },
-        { top: '40%', left: '2%' }, { top: '50%', right: '3%' }
+        { top: '70%', left: '10%' }, { top: '75%', right: '5%' }
     ];
     positions.forEach((pos, i) => {
         const heart = document.createElement('div');
@@ -207,7 +206,7 @@ function createPulsatingHearts() {
 
 function triggerShower() {
     const items = ['❤️', '🌸', '🪷', '💗', '💖'];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 80; i++) {
         setTimeout(() => {
             const item = document.createElement('div');
             item.className = 'shower-item';
@@ -215,7 +214,7 @@ function triggerShower() {
             item.style.left = Math.random() * 100 + '%';
             document.body.appendChild(item);
             setTimeout(() => item.remove(), 3000);
-        }, i * 100);
+        }, i * 50);
     }
 }
 
@@ -238,19 +237,21 @@ function next() {
 
         index++;
 
-        // When we reach the end of the message array
+        // Fix: Check if we just displayed the very last message
         if (index === messages.length) {
             btn.innerText = "💕 Always & Forever 💕";
-            btn.onclick = finalAction; // Change button function
+            // Important: We change the function here so the NEXT click triggers the shower
+            btn.setAttribute("onclick", "finalAction()");
         }
     }
 }
 
 function finalAction() {
     triggerShower();
+    // Add a little delay before the popup so she sees the shower first
     setTimeout(() => {
         alert("Love you more than anything! ❤️");
-    }, 500);
+    }, 1000);
 }
 
 window.addEventListener('load', createPulsatingHearts);
