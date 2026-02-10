@@ -3,34 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Valentine's Day!</title>
+    <title>For Rasamalai ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
     <style>
         body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffdde1, #ee9ca7);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #ffcccb;
-            font-family: Arial, sans-serif;
+            font-family: "Poppins", sans-serif;
+            overflow: hidden;
         }
-        h1 {
-            color: red;
-            font-size: 3em;
+
+        .card {
+            background: white;
+            padding: 30px;
+            width: 90%;
+            max-width: 420px;
+            border-radius: 22px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            z-index: 10;
+            position: relative;
         }
-        p {
-            font-size: 1.5em;
-        }
+
         .heart {
-            color: red;
-            font-size: 5em;
+            font-size: 26px;
+            animation: pulse 1.5s infinite;
+            margin-bottom: 10px;
+        }
+
+        .text {
+            font-size: 18px;
+            color: #444;
+            min-height: 100px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in forwards;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 15px;
+            margin-top: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        button {
+            background: #ff4d6d;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        button:hover {
+            background: #ff3357;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background: #ffb3c1;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulsating-heart {
+            position: fixed;
+            font-size: 30px;
+            opacity: 0.6;
+            animation: floatAndPulse 3s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes floatAndPulse {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-20px) scale(1.1); opacity: 0.8; }
+        }
+
+        .heart-shower {
+            position: fixed;
+            font-size: 40px;
+            animation: fall 3s linear forwards;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Happy Valentine's Day!</h1>
-        <div class="heart">❤️</div>
-        <p>You're the one who makes my heart skip a beat!</p>
+
+<audio id="bgMusic" loop>
+  <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+    <div class="heart">❤️</div>
+    <div class="text fade-in" id="text">
+        Hey Rasamalai…  
+        I made something just for you.
     </div>
+    <div id="image"></div>
+    <button id="btn" onclick="next()">Click to continue 💗</button>
+</div>
+
+<script>
+const messages = [
+    { text: "Hey Rasamalai ❤️" },
+    { text: "If I could, I'd be sitting next to you while you read this." },
+    { text: "But for now… this is my way of holding your hand." },
+    { text: "Just you and me. No distance. No noise." },
+    { text: "Do you remember our first conversation?" },
+    { text: "I didn't know then…" },
+    { text: "That you'd slowly become my favorite part of every day." },
+    { text: "Your name started feeling like home." },
+    { text: "Your messages became my comfort." },
+    { text: "Your voice became my peace." },
+    { text: "And then something beautiful happened…" },
+    { text: "The day we finally met ❤️", image: "first-meet.jpg" },
+    { text: "I still remember how my heart raced that day." },
+    { text: "Seeing you in real life felt surreal." },
+    { text: "Like a dream I didn't want to wake up from." },
+    { text: "That moment made every wait worth it." },
+    { text: "Long distance isn't easy, Rasamalai." },
+    { text: "Some nights feel longer." },
+    { text: "Some days feel heavier." },
+    { text: "But loving you has never felt difficult." },
+    { text: "I miss you in the smallest moments." },
+    { text: "When something good happens first." },
+    { text: "When something hurts." },
+    { text: "When I just want to talk to *my person*." },
+    { text: "That person is always you." },
+    { text: "You are my calm in chaos." },
+    { text: "My safe place, even from miles away." },
+    { text: "Every future plan in my head…" },
+    { text: "Somehow has you in it." },
+    { text: "One day, distance will stop being a problem." },
+    { text: "And I'll get to hold you instead of missing you." },
+    { text: "Until that day…" },
+    { text: "I need you to know this." },
+    { text: "You are deeply loved, Rasamalai." },
+    { text: "You matter to me more than words can explain." },
+    { text: "My heart is yours, no matter the distance ❤️" },
+    { text: "So now…" },
+    { text: "With all my heart…" },
+    { text: "Will you be my Valentine, Rasamalai? 💌" }
+];
+
+let index = 0;
+const textElement = document.getElementById("text");
+const imgDiv = document.getElementById("image");
+const music = document.getElementById("bgMusic");
+
+function createPulsatingHearts() {
+    const positions = [
+        { top: '10%', left: '5%' }, { top: '15%', right: '8%' },
+        { top: '70%', left: '10%' }, { top: '75%', right: '5%' },
+        { top: '40%', left: '2%' }, { top: '50%', right: '3%' }
+    ];
+    positions.forEach((pos, i) => {
+        const heart = document.createElement('div');
+        heart.className = 'pulsating-heart';
+        heart.innerHTML = '❤️';
+        heart.style.top = pos.top;
+        if (pos.left) heart.style.left = pos.left;
+        if (pos.right) heart.style.right = pos.right;
+        heart.style.animationDelay = `${i * 0.5}s`;
+        document.body.appendChild(heart);
+    });
+}
+
+function triggerHeartShower() {
+    for (let i = 0; i < 35; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-shower';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }, i * 150);
+    }
+}
+
+function next() {
+    if (index === 0) { music.play().catch(() => {}); }
+
+    if (index < messages.length) {
+        textElement.classList.remove("fade-in");
+        void textElement.offsetWidth; 
+        textElement.classList.add("fade-in");
+
+        textElement.innerText = messages[index].text;
+        imgDiv.innerHTML = "";
+
+        if (messages[index].image) {
+            const img = document.createElement("img");
+            img.src = messages[index].image;
+            imgDiv.appendChild(img);
+        }
+
+        index++;
+
+        if (index >= messages.length) {
+            const button = document.getElementById("btn");
+            button.innerText = "💕 Always & Forever 💕";
+            button.disabled = true;
+            triggerHeartShower();
+        }
+    }
+}
+
+window.addEventListener('load', createPulsatingHearts);
+</script>
 </body>
 </html>
